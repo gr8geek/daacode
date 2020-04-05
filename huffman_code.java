@@ -1,97 +1,121 @@
-import java.util.Scanner;
-import java.util.Iterator;
-import java.util.PriorityQueue;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.HashMap;
-class Node {
-    int f;
+import java.util.HashSet;
+import java.util.Scanner;
+class Node
+{
+    int freq;
     char c;
-    Node l,r;
-    Node(int f, char c, Node l,Node r){
-        this.l=l;
-        this.r=r;
-        this.f=f;
-        this.c=c;
-    }
-    Node(Integer f, Character c){
-        this.l=null;
-        this.r=null;
-        this.f=f;
-        this.c=c;
-    }
+    Node left;
+    Node right;
 }
-class comp implements Comparator<Node>{
-    public int compare(Node x, Node y){
-        return x.f - y.f;
+class comp implements Comparator<Node>
+{
+    @Override
+    public int compare(Node a , Node b){
+        return a.freq-b.freq;
     }
-}
-public class huffman_code{
-    static HashMap<String, Character> map =new HashMap<String,Character>();
-    static HashMap<Character, String> map2 =new HashMap<Character,String>();
 
-    static void gethuffman(Node root, String code){
-        if(Character.isLetter(root.c) || root.c == '\n'){
-            map.put(code,root.c);
-            map2.put(root.c,code);
-            return ;
+}
+public class huffman{
+    static HashMap<Character,String> map1 =new HashMap<Character, String>();
+    static HashMap<String,Character> map2 =new HashMap<String,Character>();
+    static int val=0;
+    static void printhuffman(Node root, String code)
+    {
+        System.out.println(root.c+"--"+root.freq);
+        if(Character.isLetter(root.c) || root.c ==' ')
+        {
+            map1.put(root.c, code);
+            map2.put(code,root.c);
+            return;
         }
-        gethuffman(root.l, code+"0");
-        gethuffman(root.r, code+"1");
+        printhuffman(root.left, code+"0");
+        printhuffman(root.right, code+"1");
     }
     public static void main(String args[]){
+        int n ,i; 
         Scanner sc = new Scanner(System.in);
-        String message="";
-        System.out.println("Enter the string text and type exit in a seperate line to exit");
-        while(true){
-        String st = sc.nextLine();
-        if(st.equalsIgnoreCase("exit"))
-        break;
-        else
-        message+=st+"\n";
+        System.out.println("Enter your string ending by blank space");
+        String dat = sc.nextLine();
+        HashSet<Character> ch  = new HashSet<Character>();
+        for(i = 0;i<dat.length();i++){
+            ch.add(dat.charAt(i));
         }
-        int l=message.length();
-        PriorityQueue<Node> q = new PriorityQueue<Node>(l, new comp());
-        HashMap<Character,Integer> m = new HashMap<Character,Integer>();
-        for(int i = 0;i < l; i++){
-            if(m.containsKey(message.charAt(i))){
-                m.put(message.charAt(i),m.get(message.charAt(i))+1);
-            }
-            if(!m.containsKey(message.charAt(i))){
-                m.put(message.charAt(i),0);
-            }
-            }
-        
-        for(Character ch: m.keySet()){
-            System.out.println(ch);
-            System.out.println(m.get(ch));
-            Node n = new Node(m.get(ch),ch);
-            q.add(n);
+        n = ch.size();
+        char[] charArray = new char[n]; 
+        int[] charfreq = new int[n];
+        i = 0;
+        for(Character c: ch){
+            int count = 0;
+            for(int j = 0;j<dat.length();j++){
+                if(c == dat.charAt(j))
+                count++;
+            } 
+            charArray[i]= c;
+            charfreq[i] = count;
+            i++;
         }
+        PriorityQueue<Node> q = new PriorityQueue<Node>(n , new comp());
+        for(i = 0;i < n;i++)
+        {
+            Node x = new Node();
+            x.freq = charfreq[i];
+            x.c = charArray[i];
+            x.left = null;
+            x.right = null;
+            q.add(x);
+        }
+        int v;
         Node root = null;
-        for(;q.size()>1;){
+        while(q.size()>1){
             Node x1 = q.poll();
             Node x2 = q.poll();
-            Node x3 = new Node(x1.f+x2.f,'*',x1,x2);
-            root = x3;
+            v = x1.freq + x2.freq;
+            Node x3 = new Node();
+            x3.freq = v;
+            x3.c = '*';
+            x3.left = x1;
+            x3.right = x2;
             q.add(x3);
+            root = x3;
         }
-        gethuffman(root, "");
-        String compressed="";
-        System.out.println("Compressing ...");
-        for(int i = 0;i<message.length();i++){
-            compressed += map2.get(message.charAt(i));
+        String s = "";
+        printhuffman(root , s );
+        System.out.println(map1);
+        System.out.println(map2);
+        String x="";
+        for(i = 0;i<dat.length();i++){
+            x+=map1.get(dat.charAt(i)); 
         }
-        System.out.println("Compressed:");
-        System.out.println(compressed);
-        System.out.println("Exploding(Decompressing)");
-        char c;
-        String cd="";
-        for(int i = 0;i<compressed.length();i++){
-            cd+=compressed.charAt(i);
-            if(map.containsKey(cd)){
-                System.out.print(map.get(cd));
-                cd="";
-            }
+        int len=x.length();
+        System.out.println("Size before compression "+(dat.length()*2)+" Bytes");
+        System.out.println(x.length()/8+ " Bytes After compression");
+        System.out.println("Encoded:"+x);
+        System.out.println("Decoding ...."+"\n");
+        String dec="";
+        System.out.println("Decoded:");
+        int pos = decoder(x);
+}
+static int decoder(String st){
+    String y="";
+    int i;
+    for(i=0;i<st.length();i++)
+    {
+        if(map2.containsKey(y)){
+            System.out.print(map2.get(y));
+            break;
+        }
+        else{
+            y+=st.charAt(i);
         }
     }
+    if(st.length()>0){
+       
+    decoder(st.substring(i,st.length()));
+
+    }
+    return i;
+}
 }
