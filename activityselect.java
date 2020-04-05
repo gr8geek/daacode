@@ -22,7 +22,7 @@ public class activityselect
 
         sc.close();
     }
-    
+
 }
 class activity{
     int s,f;
