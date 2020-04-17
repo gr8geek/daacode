@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class bst{
     public static void main(String args[]){
         Scanner sc=new Scanner(System.in);
-        System.out.println("1.Insert\n2.Inorder");
+        System.out.println("1.Insert\n2.Inorder\n3.maximum");
         boolean loop=true;
         int ch,val;
         Node root=null;
@@ -41,8 +41,15 @@ public class bst{
                 case 2:
                 inorder(root);
                 break;
+                case 3:
+                x=root;
+                while(x.r!=null){
+                        x=x.r;           
+                }
+                System.out.println(x.v);
+                break;
                 default:
-                loop=false;
+                    loop=false;
                 break;
             }
         }
@@ -54,4 +61,5 @@ public class bst{
             inorder(x.r);
         }
     }
+    
 }
