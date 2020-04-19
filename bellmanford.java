@@ -55,7 +55,7 @@ public class bellmanford{
             int cost=sc.nextInt();
             g.addEdge(u, v, cost);
         }
-        bellmanfordfun(Graph g);
+        int v=bellmanfordfun(Graph g);
         
     }
     public static int bellmanfordfun(Graph g){
