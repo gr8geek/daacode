@@ -16,10 +16,10 @@ public class nquenn{
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 if(p[i].col==j){
-                    System.out.print(" Q ");
+                    System.out.print("Q");
                 }
                 else{
-                    System.out.print("   ");
+                    System.out.print("1");
                 }
 
             }
