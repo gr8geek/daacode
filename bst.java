@@ -2,12 +2,12 @@ import java.util.Scaanner;
 import java.util.Scanner;
 
 public class bst{
+    static Node root=null;
     public static void main(String args[]){
         Scanner sc=new Scanner(System.in);
-        System.out.println("1.Insert\n2.Inorder\n3.maximum");
+        System.out.println("1.Insert\n2.Inorder\n3.maximum\n4.delete min");
         boolean loop=true;
         int ch,val;
-        Node root=null;
         Node x=null,t=null;
         while(loop){
             System.out.println("Enter your option");
@@ -48,6 +48,9 @@ public class bst{
                 }
                 System.out.println(x.v);
                 break;
+                case 4:
+                    deleteMin(root);
+                break;
                 default:
                     loop=false;
                 break;
@@ -61,5 +64,18 @@ public class bst{
             inorder(x.r);
         }
     }
+    static void deleteMin(Node x){
+        //Node x is the root
+        if(x.l==null){
+            root=x.r;
+            return;
+        }
+        Node t=null;
+        while(x.l!=null){
+            t=x;
+            x=x.l;
+        }
+        t.l=x.r;
     
+}
 }
