@@ -10,10 +10,18 @@ class Node{
     }
 }
 class Graph{
+    class Node{
+        int cost,val;
+        Node(int cost,int val){
+            this.val=val;
+            this.cost=cost;
+        }
+    }
     ArrayList<Node> adj[];
     Graph(int n)
     {
         int i;
+        adj=new ArrayList[n];
         for(i=0;i<n;i++){
             adj[i]=new ArrayList<Node>();
         }
@@ -38,7 +46,7 @@ public class bellmanford{
             if(i!=s){
                 int[] t=A[i];
                 for(int j=0;j<t.length;j++){
-                    A[j]=Integer.MAX_VALUE;
+                    t[j]=Integer.MAX_VALUE;
                 }
             }
         }//initializing the all vertics with +infinity except the source vertex
